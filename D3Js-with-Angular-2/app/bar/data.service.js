@@ -1,4 +1,6 @@
-System.register(['angular2/core'], function(exports_1) {
+System.register(['angular2/core'], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -25,6 +27,11 @@ System.register(['angular2/core'], function(exports_1) {
                     var data = this.stack(d3.range(numberOfLayer).map(function () { return bumpLayer(numberOfSamples, .1); }));
                     return data;
                 };
+                DataService.prototype.getServerData = function (numberOfLayer, numberOfSamples) {
+                    var bumpLayer = this.bumpLayer;
+                    var data = this.stack(d3.range(numberOfLayer).map(function () { return bumpLayer(numberOfSamples, .1); }));
+                    return Promise.resolve(data);
+                };
                 DataService.prototype.bumpLayer = function (n, o) {
                     function bump(a) {
                         var x = 1 / (.1 + Math.random()), y = 2 * Math.random() - .5, z = 10 / (.1 + Math.random());
@@ -45,7 +52,7 @@ System.register(['angular2/core'], function(exports_1) {
                     __metadata('design:paramtypes', [])
                 ], DataService);
                 return DataService;
-            })();
+            }());
             exports_1("DataService", DataService);
         }
     }

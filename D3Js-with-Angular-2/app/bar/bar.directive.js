@@ -1,4 +1,6 @@
-System.register(['angular2/core', './chart.obj.service'], function(exports_1) {
+System.register(['angular2/core', './chart.obj.service'], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -22,18 +24,18 @@ System.register(['angular2/core', './chart.obj.service'], function(exports_1) {
             BarDirective = (function () {
                 function BarDirective(el) {
                     this._el = el.nativeElement;
-                    this.barChart = new chart_obj_service_1.ChartObjService().getObj();
                 }
                 BarDirective.prototype.ngOnInit = function () {
-                    var barChart = this.barChart;
-                    this.barChartOption.chartObj = barChart;
-                    this.dataBind();
+                    this.barChartOption.dataBind = this.dataBind;
+                    this.barChartOption._el = this._el;
                 };
-                BarDirective.prototype.dataBind = function () {
+                BarDirective.prototype.dataBind = function (data, chartObj) {
+                    this.barChart = new chart_obj_service_1.ChartObjService().getObj();
                     var barChart = this.barChart;
-                    var numberOfSamples = this.barChartOption.numberOfSamples, layers = this.barChartOption.data, margin = this.barChartOption.margin, width = this.barChartOption.width - margin.left - margin.right;
-                    barChart.numberOfLayers = this.barChartOption.numberOfLayers;
-                    barChart.height = this.barChartOption.height - margin.top - margin.bottom;
+                    chartObj.chartObj = barChart;
+                    var numberOfSamples = chartObj.numberOfSamples, layers = data, margin = chartObj.margin, width = chartObj.width - margin.left - margin.right;
+                    barChart.numberOfLayers = chartObj.numberOfLayers;
+                    barChart.height = chartObj.height - margin.top - margin.bottom;
                     barChart.yStackMax = d3.max(layers, function (layer) { return d3.max(layer, function (d) { return d.y0 + d.y; }); });
                     barChart.yGroupMax = d3.max(layers, function (layer) { return d3.max(layer, function (d) { return d.y; }); });
                     barChart.x = d3.scale.ordinal()
@@ -50,7 +52,7 @@ System.register(['angular2/core', './chart.obj.service'], function(exports_1) {
                         .tickSize(0)
                         .tickPadding(6)
                         .orient("bottom");
-                    var svg = d3.select(this._el).append("svg")
+                    var svg = d3.select(chartObj._el).append("svg")
                         .attr("width", width + margin.left + margin.right)
                         .attr("height", barChart.height + margin.top + margin.bottom)
                         .append("g")
@@ -82,13 +84,12 @@ System.register(['angular2/core', './chart.obj.service'], function(exports_1) {
                 ], BarDirective.prototype, "barChartOption", void 0);
                 BarDirective = __decorate([
                     core_1.Directive({
-                        selector: '[chartBar]',
-                        providers: [chart_obj_service_1.ChartObjService]
+                        selector: '[chartBar]'
                     }), 
                     __metadata('design:paramtypes', [core_1.ElementRef])
                 ], BarDirective);
                 return BarDirective;
-            })();
+            }());
             exports_1("BarDirective", BarDirective);
         }
     }

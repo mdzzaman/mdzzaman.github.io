@@ -1,10 +1,9 @@
-import { Directive, ElementRef, Input, OnInit } from 'angular2/core';
+import {Directive, ElementRef, Input, OnInit} from 'angular2/core';
 import { ChartObjService } from './chart.obj.service';
 declare var d3: any;
 
 @Directive({
-    selector: '[chartBar]',
-    providers: [ChartObjService]
+    selector: '[chartBar]'
 })
 
 export class BarDirective implements OnInit {
@@ -14,24 +13,24 @@ export class BarDirective implements OnInit {
     @Input('chartBar') barChartOption: any;
     constructor(el: ElementRef) {
         this._el = el.nativeElement;
-        this.barChart = new ChartObjService().getObj();
     }
 
     ngOnInit() {
-        var barChart = this.barChart;
-        this.barChartOption.chartObj = barChart;
-        this.dataBind();
+        this.barChartOption.dataBind = this.dataBind;
+        this.barChartOption._el = this._el;
     }
 
-    dataBind() {
+    dataBind(data: any[], chartObj: any) {
+        this.barChart = new ChartObjService().getObj();
         var barChart = this.barChart;
-        var numberOfSamples = this.barChartOption.numberOfSamples,
-            layers = this.barChartOption.data,
-            margin = this.barChartOption.margin,
-            width = this.barChartOption.width - margin.left - margin.right;
+        chartObj.chartObj = barChart;
+        var numberOfSamples = chartObj.numberOfSamples,
+            layers = data,
+            margin = chartObj.margin,
+            width = chartObj.width - margin.left - margin.right;
 
-        barChart.numberOfLayers = this.barChartOption.numberOfLayers;
-        barChart.height = this.barChartOption.height - margin.top - margin.bottom;
+        barChart.numberOfLayers = chartObj.numberOfLayers;
+        barChart.height = chartObj.height - margin.top - margin.bottom;
 
         barChart.yStackMax = d3.max(layers, function (layer) { return d3.max(layer, function (d) { return d.y0 + d.y; }); });
         barChart.yGroupMax = d3.max(layers, function (layer) { return d3.max(layer, function (d) { return d.y; }); });
@@ -54,7 +53,7 @@ export class BarDirective implements OnInit {
             .tickPadding(6)
             .orient("bottom");
 
-        var svg = d3.select(this._el).append("svg")
+        var svg = d3.select(chartObj._el).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", barChart.height + margin.top + margin.bottom)
             .append("g")
@@ -84,4 +83,5 @@ export class BarDirective implements OnInit {
             .attr("transform", "translate(0," + barChart.height + ")")
             .call(xAxis);
     }
+    
 }

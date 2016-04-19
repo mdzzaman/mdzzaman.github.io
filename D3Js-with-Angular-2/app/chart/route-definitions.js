@@ -1,4 +1,6 @@
-System.register(['../bar/bar.component'], function(exports_1) {
+System.register(['../bar/bar.component'], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var bar_component_1;
     var RouteDefinitions;
     return {

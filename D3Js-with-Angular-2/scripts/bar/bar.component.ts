@@ -9,7 +9,7 @@ import { DataService } from './data.service'
     directives: [BarDirective],
     providers: [DataService]
 })
-
+// working for server data
 export class BarComponent implements OnInit {
     title = 'Bar Chart';
     private bar1: any;
@@ -20,30 +20,40 @@ export class BarComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.chartOne();
-        this.chartTwo();
-    }
-
-    chartOne() {
         this.bar1 = {
             numberOfLayers: 4,
-            numberOfSamples: 15,
-            data: this._dataService.getData(4, 15),
+            numberOfSamples: 38,
             margin: { top: 40, right: 10, bottom: 20, left: 10 },
             width: 960,
             height: 200
         };
-    }
+        this._dataService.getServerData(4, 39).then(dataList => {
+            this.chartOne(dataList);
+        }
+        );
 
-    chartTwo() {
         this.bar2 = {
             numberOfLayers: 4,
             numberOfSamples: 20,
-            data: this._dataService.getData(4, 20),
             margin: { top: 40, right: 10, bottom: 20, left: 10 },
             width: 960,
             height: 200
         };
+
+        this._dataService.getServerData(4, 20).then(dataList => {
+            this.chartTwo(dataList)
+        }
+        );
+        
+       
+    }
+
+    chartOne(dataList:any[]) {
+        this.bar1.dataBind(dataList, this.bar1);
+    }
+
+    chartTwo(dataList: any[]) {
+        this.bar2.dataBind(dataList, this.bar2);
     }
 
     chartChange(value: string) {

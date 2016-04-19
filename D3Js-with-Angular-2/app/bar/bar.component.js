@@ -1,4 +1,6 @@
-System.register(['angular2/core', './bar.directive', './data.service'], function(exports_1) {
+System.register(['angular2/core', './bar.directive', './data.service'], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -57,28 +59,33 @@ System.register(['angular2/core', './bar.directive', './data.service'], function
                     this.title = 'Bar Chart';
                 }
                 BarComponent.prototype.ngOnInit = function () {
-                    this.chartOne();
-                    this.chartTwo();
-                };
-                BarComponent.prototype.chartOne = function () {
+                    var _this = this;
                     this.bar1 = {
                         numberOfLayers: 4,
-                        numberOfSamples: 15,
-                        data: this._dataService.getData(4, 15),
+                        numberOfSamples: 38,
                         margin: { top: 40, right: 10, bottom: 20, left: 10 },
                         width: 960,
                         height: 200
                     };
-                };
-                BarComponent.prototype.chartTwo = function () {
+                    this._dataService.getServerData(4, 39).then(function (dataList) {
+                        _this.chartOne(dataList);
+                    });
                     this.bar2 = {
                         numberOfLayers: 4,
                         numberOfSamples: 20,
-                        data: this._dataService.getData(4, 20),
                         margin: { top: 40, right: 10, bottom: 20, left: 10 },
                         width: 960,
                         height: 200
                     };
+                    this._dataService.getServerData(4, 20).then(function (dataList) {
+                        _this.chartTwo(dataList);
+                    });
+                };
+                BarComponent.prototype.chartOne = function (dataList) {
+                    this.bar1.dataBind(dataList, this.bar1);
+                };
+                BarComponent.prototype.chartTwo = function (dataList) {
+                    this.bar2.dataBind(dataList, this.bar2);
                 };
                 BarComponent.prototype.chartChange = function (value) {
                     change(value, this.bar1.chartObj);
@@ -97,7 +104,7 @@ System.register(['angular2/core', './bar.directive', './data.service'], function
                     __metadata('design:paramtypes', [data_service_1.DataService])
                 ], BarComponent);
                 return BarComponent;
-            })();
+            }());
             exports_1("BarComponent", BarComponent);
         }
     }

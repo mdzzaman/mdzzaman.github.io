@@ -12,6 +12,11 @@ export class DataService {
         var data = this.stack(d3.range(numberOfLayer).map(function () { return bumpLayer(numberOfSamples, .1); }));
         return data;
     }
+    getServerData(numberOfLayer: number, numberOfSamples: number) {
+        var bumpLayer = this.bumpLayer;
+        var data = this.stack(d3.range(numberOfLayer).map(function () { return bumpLayer(numberOfSamples, .1); }));
+        return Promise.resolve(data);
+    }
 
     bumpLayer(n, o) {
         function bump(a) {
